@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+
+<ul id="myul"></ul> <input type='text' id='myin'>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script type="text/javascript">
+	var stompClient = null;
+	var username = 'ajendra';
+
+	connect();
+	myin.onkeydown=fun;
+
+	function connect() {
+	    var socket = new SockJS('/javatechie');
+	    stompClient = Stomp.over(socket);
+	    stompClient.connect({}, onConnected);
+	}
+	function onConnected() {
+	        alert("sdf");
+	    stompClient.subscribe('/topic/public', onMessageReceived);
+	    stompClient.send("/app/chat.register",
+	        {},
+	        JSON.stringify({sender: username, type: 'JOIN'})
+	    )
+	}
+
+	function fun(event){
+		ch=event.keyCode;
+		ch1=String.fromCharCode(ch);
+		if(ch===13){
+			if(myin.value && stompClient) {
+		        var chatMessage = {
+		            sender: username,
+		            content: myin.value,
+		            type: 'CHAT'
+		        };
+		        stompClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
+		        myin.value = '';
+		    }
+		}
+	}
+	function onMessageReceived(payload) {
+	    var message = JSON.parse(payload.body);
+	    var li = document.createElement('li');
+
+	    if(message.type === 'JOIN') {
+	        message.content = message.sender + ' joined!';
+	    }else {
+	        li.appendChild(document.createTextNode(message.sender));
+	    }
+	    li.appendChild(document.createTextNode(message.content));
+	    myul.appendChild(li);
+	}
+	</script>
+</body>
+</html>

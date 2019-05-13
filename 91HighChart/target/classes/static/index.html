@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Pie Chart Demo</title>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	</head>
+	<body style="background:#100e17;">
+		<div id="container" style="height: 400px;display:inline-block;"></div>
+		
+		<a href="3d-donut.html">3d-donut</a>
+		<a href="3dpie.html">3dpie</a>
+		<a href="column-chart.html">column-chart</a>
+		<a href="column-chart2.html">column-chart2</a>
+		<a href="dynamic.html">dynamic</a>
+		
+		<script>
+		
+		$.ajax({url: "/emp", success: function(result){
+			
+			 Highcharts.setOptions({
+			        colors: ['red', 'green', '#ED561B', '#DDDF00', '#24CBE5', '#64E572']
+			    });
+			 
+			 var myChart = Highcharts.chart('container', {
+				 chart: {type: 'pie',backgroundColor: '#FCFFC5'},
+				 
+				 
+		/*Highcharts.chart('container', {
+		    chart: {
+		        type: 'pie'
+		        //options3d: {
+		          //  enabled: true,
+		            //alpha: 45,
+		            //beta: 0
+		        //}
+		    },*/
+		    
+		    title: {
+		        text: 'Sales Report - Jan 2018 to Mar 2018'
+		    },
+		    
+		 
+		    /*series: [{
+		        //type: 'pie',
+		        name: 'Expense',
+		        data: [
+		            ['laptop', 100],
+		            ['mobile', 200],
+		           ['brush',300],
+		            ['net', 400],
+		            ['router', 500],
+		            ['mm', 600]
+		        ]
+		    }]*/
+		    
+		    series: result
+		    
+		});
+	    }});
+
+</script>
+</body>
+</html>
